@@ -5,10 +5,12 @@ import { Sidebar, Videos } from "./";
 import { fetchFromAPI } from "../utils/fetchFromAPI";
 
 const Feed = () => {
-  const [selectedCategory, setselectedCategory] = useState("New");
+  const [selectedCategory, setSelectedCategory] = useState("New");
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    fetchFromAPI(`search?part=snippet&q=${selectedCategory}`);
+    fetchFromAPI(`search?part=snippet&q=${selectedCategory}`)
+      .then((data) => setVideos(data.items))
   }, [selectedCategory]);
 
   return (
@@ -22,7 +24,7 @@ const Feed = () => {
       >
         <Sidebar 
           selectedCategory={selectedCategory}
-          setselectedCategory={setselectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
 
         <Typography
@@ -41,10 +43,10 @@ const Feed = () => {
           mb={2}
           sx={{ color: "white" }}
         >
-          {selectedCategory}<span style={{ color: "#FC1503" }}>videos</span>
+          {selectedCategory} <span style={{ color: "#FC1503" }}>videos</span>
         </Typography>
 
-        <Videos videos={[]} />
+        <Videos videos={videos} />
       </Box>
     </Stack>
   );
